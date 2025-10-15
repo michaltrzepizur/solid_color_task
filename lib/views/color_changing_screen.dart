@@ -1,34 +1,9 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const SolidColorTask());
-}
-
-/// Main app widget
-class SolidColorTask extends StatelessWidget {
-  /// constructor
-  const SolidColorTask({super.key});
-
-  ///Creates the main user interface of the application
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontWeight: FontWeight.w500),
-          titleLarge: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-      home: const ColorChangingScreen(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
+import 'package:solid_color_task/logic/color_generator_logic.dart';
 
 /// A widget that changes the background color on touch.
 class ColorChangingScreen extends StatefulWidget {
-  //// constructor
+  /// constructor
   const ColorChangingScreen({super.key});
 
   /// Creates a mutable state for this widget.
@@ -37,26 +12,19 @@ class ColorChangingScreen extends StatefulWidget {
 }
 
 class _ColorChangingScreenState extends State<ColorChangingScreen> {
-  /// Avoid magic numbers logic
-  static const int _maxRgbValue = 0xFFFFFF;
-  static const int _alphaValue = 0xFF000000;
+  final _colorGenerator = ColorGeneratorLogic();
 
+  /// The currently displayed background color.
   Color _backgroundColor = Colors.white;
 
-  Color _generateRandomColor() {
-    final random = Random();
-    final randomColorValue = random.nextInt(_maxRgbValue + 1);
-
-    return Color(_alphaValue | randomColorValue);
-  }
-
+  /// Handles the tap event and updates the color state.
   void _changeColor() {
     setState(() {
-      _backgroundColor = _generateRandomColor();
+      _backgroundColor = _colorGenerator.generateRandomColor();
     });
   }
 
-  /// Text
+  /// Builds the user interface.
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -65,7 +33,7 @@ class _ColorChangingScreenState extends State<ColorChangingScreen> {
         backgroundColor: _backgroundColor,
         body: const Center(
           child: Text(
-            'Hello ther',
+            'Hello there',
             style: TextStyle(
               fontSize: 48.0,
               fontWeight: FontWeight.bold,
